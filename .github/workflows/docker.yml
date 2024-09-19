@@ -11,24 +11,57 @@ jobs:
           - name: Checkout Repo
             uses: actions/checkout@v4
 
-          - name: Login to Docker Hub
+        #   - name: Login to Docker Hub
+        #     uses: docker/login-action@v3
+        #     with:
+        #         username: ${{ vars.DOCKER_USERNAME }}
+        #         password: ${{ secrets.DOCKER_TOKEN }}
+
+          - name: Login to GitHub Container Registry
             uses: docker/login-action@v3
             with:
-                username: ${{ vars.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_TOKEN }}
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
 
           - name: Pull Docker image
             run: docker pull nicconike/automatedgo:master
 
-          - name: Run Docker Container
+          - name: Test with Dockerfile
             run: |
-                docker run --name automatedgo-container nicconike/automatedgo:master \
-                    --file files/Dockerfile \
+                docker run --name automatedgo-dockerfile \
+                    -v ${{ github.workspace }}/files:/app/files \
+                    nicconike/automatedgo:master \
+                    --file /app/files/version1.txt \
                     --os linux \
                     --arch amd64
+                docker stop automatedgo-dockerfile
+                docker rm automatedgo-dockerfile
 
-          - name: Clean up
-            if: always()
+          - name: Test with JSON
             run: |
-                docker stop automatedgo-container
-                docker rm automatedgo-container
+                docker run --name automatedgo-json \
+                    -v ${{ github.workspace }}/files:/app/files \
+                    nicconike/automatedgo:master \
+                    --file /app/files/go.json \
+                    --os linux \
+                    --arch amd64
+                docker stop automatedgo-json
+                docker rm automatedgo-json
+
+          - name: Test with version.txt
+            run: |
+                docker run --name automatedgo-txt \
+                    -v ${{ github.workspace }}/files:/app/files \
+                    nicconike/automatedgo:master \
+                    --file /app/files/version.txt \
+                    --os linux \
+                    --arch amd64
+                docker stop automatedgo-txt
+                docker rm automatedgo-txt
+
+        #   - name: Clean up
+        #     if: always()
+        #     run: |
+        #         docker stop automatedgo-container
+        #         docker rm automatedgo-container
