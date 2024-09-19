@@ -5,7 +5,7 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/Nicconike/goautomate/pkg"
+	"github.com/Nicconike/AutomatedGo/pkg"
 )
 
 func main() {
@@ -50,8 +50,8 @@ func commitAndPush(version string) error {
 		name string
 		args []string
 	}{
-		{"git", []string{"config", "--local", "user.name", "github-actions[bot]"}},
-		{"git", []string{"config", "--local", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"}},
+		{"git", []string{"config", "--local", "user.name", "nicconike"}},
+		{"git", []string{"config", "--local", "user.email", "38905025+Nicconike@users.noreply.github.com"}},
 		{"git", []string{"add", "."}},
 		{"git", []string{"commit", "-m", fmt.Sprintf("Update Go version to %s", version)}},
 		{"git", []string{"push"}},
