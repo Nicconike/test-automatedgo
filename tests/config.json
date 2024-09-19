@@ -1,7 +1,0 @@
-{
-	"goVersion": "1.19.5",
-	"projectName": "test-goautomate",
-	"dependencies": [
-		"github.com/Nicconike/goautomate"
-	]
-}

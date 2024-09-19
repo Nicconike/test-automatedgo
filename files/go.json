@@ -1,0 +1,7 @@
+{
+	"goVersion": "1.19.5",
+	"projectName": "test-automatedgo",
+	"dependencies": [
+		"github.com/Nicconike/AutomatedGo"
+	]
+}
