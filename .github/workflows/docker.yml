@@ -27,38 +27,32 @@ jobs:
           - name: Pull Docker image
             run: docker pull nicconike/automatedgo:master
 
-          - name: Test with Dockerfile
+          - name: Test Docker Container for Dockerfile
             run: |
-                docker run --name automatedgo-dockerfile \
-                    -v ${{ github.workspace }}/files:/app/files \
+                docker run --rm --name automatedgo-dockerfile \
+                    -v ${{ github.workspace }}/files:/automatedgo/files \
                     nicconike/automatedgo:master \
-                    --file /app/files/version1.txt \
+                    --file /automatedgo/files/Dockerfile \
                     --os linux \
                     --arch amd64
-                docker stop automatedgo-dockerfile
-                docker rm automatedgo-dockerfile
 
-          - name: Test with JSON
+          - name: Test Docker Container for JSON
             run: |
-                docker run --name automatedgo-json \
-                    -v ${{ github.workspace }}/files:/app/files \
+                docker run --rm --name automatedgo-json \
+                    -v ${{ github.workspace }}/files:/automatedgo/files \
                     nicconike/automatedgo:master \
-                    --file /app/files/go.json \
+                    --file /automatedgo/files/go.json \
                     --os linux \
                     --arch amd64
-                docker stop automatedgo-json
-                docker rm automatedgo-json
 
-          - name: Test with version.txt
+          - name: Test Docker Container for Text files
             run: |
-                docker run --name automatedgo-txt \
-                    -v ${{ github.workspace }}/files:/app/files \
+                docker run --rm --name automatedgo-txt \
+                    -v ${{ github.workspace }}/files:/automatedgo/files \
                     nicconike/automatedgo:master \
-                    --file /app/files/version.txt \
+                    --file /automatedgo/files/version.txt \
                     --os linux \
                     --arch amd64
-                docker stop automatedgo-txt
-                docker rm automatedgo-txt
 
         #   - name: Clean up
         #     if: always()
