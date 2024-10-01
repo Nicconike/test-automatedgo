@@ -12,39 +12,22 @@ jobs:
           - name: Checkout Repo
             uses: actions/checkout@v4
 
-          - name: Login to GitHub Container Registry
-            uses: docker/login-action@v3
-            with:
-                registry: ghcr.io
-                username: ${{ github.actor }}
-                password: ${{ secrets.GITHUB_TOKEN }}
-
-          - name: Pull Docker image
-            run: docker pull nicconike/automatedgo:2.0.1
-
-          - name: Test Docker Container for Dockerfile
+          - name: Pull Latest Docker image
             run: |
-                docker run --rm --name automatedgo-dockerfile \
-                    -v ${{ github.workspace }}/files:/automatedgo/files \
-                    nicconike/automatedgo:2.0.1 \
-                    --file /automatedgo/files/Dockerfile \
+                latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+                docker pull ghcr.io/nicconike/automatedgo:$latest_tag
+
+          - name: Test Docker Container (Abort Download)
+            run: |
+                echo "no" | docker run --rm --name automatedgo-abort \
+                    ghcr.io/nicconike/automatedgo:master \
                     --os linux \
                     --arch amd64
 
-          - name: Test Docker Container for JSON
+          - name: Test Docker Container (Confirm Download)
             run: |
-                docker run --rm --name automatedgo-json \
-                    -v ${{ github.workspace }}/files:/automatedgo/files \
-                    nicconike/automatedgo:2.0.1 \
-                    --file /automatedgo/files/go.json \
-                    --os linux \
-                    --arch amd64
-
-          - name: Test Docker Container for Text files
-            run: |
-                docker run --rm --name automatedgo-txt \
-                    -v ${{ github.workspace }}/files:/automatedgo/files \
-                    nicconike/automatedgo:2.0.1 \
-                    --file /automatedgo/files/version.txt \
+                echo "yes" | docker run --rm --name automatedgo-confirm \
+                    -v ${{ github.workspace }}:/automatedgo \
+                    ghcr.io/nicconike/automatedgo:master \
                     --os linux \
                     --arch amd64
