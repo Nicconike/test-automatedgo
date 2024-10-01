@@ -3,3 +3,5 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/nicconike/test-automatedgo)
 
 Testing the functionalities of [AutomatedGo](https://github.com/Nicconike/AutomatedGo) with running the container agaisnt multiple test scenarios
+
+<!-- tree /F > project-structure.txt -->
