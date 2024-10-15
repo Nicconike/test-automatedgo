@@ -5,32 +5,39 @@ import (
 	"log"
 	"os/exec"
 
-	"github.com/Nicconike/AutomatedGo/pkg"
+	"github.com/Nicconike/AutomatedGo/v2/pkg"
 )
 
 func main() {
+	// Create a new VersionService
+	service := &pkg.VersionService{
+		Downloader: &pkg.DefaultDownloader{},
+		Remover:    &pkg.DefaultRemover{},
+		Checksum:   &pkg.DefaultChecksumCalculator{},
+	}
+
 	// Get the latest Go version
-	latestVersion, err := pkg.GetLatestVersion()
+	latestVersion, err := service.GetLatestVersion()
 	if err != nil {
 		log.Fatalf("Error getting latest version: %v", err)
 	}
 	fmt.Printf("Latest Go version: %s\n", latestVersion)
 
 	// Get current version
-	currentVersion, err := pkg.GetCurrentVersion("tests/Dockerfile", "")
+	currentVersion, err := service.GetCurrentVersion("tests/Dockerfile", "")
 	if err != nil {
 		log.Fatalf("Error getting current version: %v", err)
 	}
 	fmt.Printf("Current Go version: %s\n", currentVersion)
 
 	// Check if update is needed
-	if !pkg.IsNewer(latestVersion, currentVersion) {
+	if !service.IsNewer(latestVersion, currentVersion) {
 		fmt.Println("Already on the latest version. No update needed.")
 		return
 	}
 
 	// Download the latest Go version
-	err = pkg.DownloadGo(latestVersion, "", "")
+	err = service.DownloadGo(latestVersion, "", "", "")
 	if err != nil {
 		log.Fatalf("Error downloading Go: %v", err)
 	}
@@ -50,8 +57,8 @@ func commitAndPush(version string) error {
 		name string
 		args []string
 	}{
-		{"git", []string{"config", "--local", "user.name", "nicconike"}},
-		{"git", []string{"config", "--local", "user.email", "38905025+Nicconike@users.noreply.github.com"}},
+		{"git", []string{"config", "--local", "user.name", "github-actions[bot]"}},
+		{"git", []string{"config", "--local", "user.email", "41898282+github-actions[bot]@users.noreply.github.com"}},
 		{"git", []string{"add", "."}},
 		{"git", []string{"commit", "-m", fmt.Sprintf("Update Go version to %s", version)}},
 		{"git", []string{"push"}},
