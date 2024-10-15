@@ -14,8 +14,7 @@ jobs:
 
           - name: Pull Latest Docker image
             run: |
-                latest_tag=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
-                docker pull ghcr.io/nicconike/automatedgo:$latest_tag
+                docker pull ghcr.io/nicconike/automatedgo:v2.0.3
 
           - name: Test Docker Container (Abort Download)
             run: |
