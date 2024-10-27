@@ -14,12 +14,12 @@ jobs:
 
           - name: Pull Latest Docker image
             run: |
-                docker pull ghcr.io/nicconike/automatedgo:2.0.3
+                docker pull ghcr.io/nicconike/automatedgo:2.1.0
 
           - name: Test Docker Container (Abort Download)
             run: |
                 echo "no" | docker run --rm --name automatedgo-abort \
-                    ghcr.io/nicconike/automatedgo:master \
+                    ghcr.io/nicconike/automatedgo:2.1.0 \
                     --os linux \
                     --arch amd64
 
@@ -27,6 +27,6 @@ jobs:
             run: |
                 echo "yes" | docker run --rm --name automatedgo-confirm \
                     -v ${{ github.workspace }}:/automatedgo \
-                    ghcr.io/nicconike/automatedgo:master \
+                    ghcr.io/nicconike/automatedgo:2.1.0 \
                     --os linux \
                     --arch amd64

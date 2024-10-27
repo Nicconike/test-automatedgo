@@ -2,7 +2,7 @@ module test-automatedgo
 
 go 1.23.1
 
-require github.com/Nicconike/AutomatedGo/v2 v2.0.3
+require github.com/Nicconike/AutomatedGo/v2 v2.1.0
 
 require (
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
